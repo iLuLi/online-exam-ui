@@ -1,50 +1,65 @@
 <template>
-  <div class="login-view">
-    <div class="form">
-      <Form :model="authc">
-        <Form-item prop="user">
-          <Input v-model="authc.username" size="large" placeholder="请输入用户名">
-            <Icon type="ios-person-outline" size="21" slot="prepend"/>
-          </Input>
-        </Form-item>
-        <Form-item>
-          <Input v-model="authc.password" size="large" placeholder="请输入密码" type="password">
-            <Icon type="ios-locked-outline" size="21" slot="prepend"/>
-          </Input>
-        </Form-item>
-        <Form-item>
-          <Button type="primary" size="large">登陆</Button>
-          <Button type="ghost" size="large" style="margin-left: 20px;">注册</Button>
-        </Form-item>
-      </Form>
+  <div class="login-box">
+    <div class="login-logo">在线考试系统</div>
+    <div class="login-box-body">
+      <div class="form-group has-feedback">
+        <input type="text" class="form-control" v-model="username">
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <input type="password" class="form-control" v-model="password">
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox">
+            <label>
+              <input type="checkbox" class="ml0">
+              记住我
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <button class="btn btn-primary btn-block btn-flat" @click="login">登录</button>
+        </div>
+        <div v-show="success">{{msg}}</div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'login',
-    data () {
-      return {
-        authc: {
-          username: '',
-          password: ''
-        }
-      }
+import { mapState } from 'vuex'
+
+export default {
+  name: 'login',
+  data () {
+    return {
+      username: '',
+      password: '',
+      isRememberMe: false
+    }
+  },
+  computed: mapState({
+    success,
+    msg
+  }),
+  methods: {
+    login () {
+      this.$store.dispatch('login', {
+        username: this.username,
+        password: this.password
+      })
     }
   }
+}
 </script>
 
-<style lang="stylus" scoped>
-  .login-view
-    position: absolute
-    top: 0
-    bottom: 0
-    left: 0
-    right: 0
-    background-color: #2c3e50
-    .form 
-      width: 300px
-      margin: auto
-      margin-top: 200px
+<style lang="stylus">
+  body
+    background-color: #d2d6de
+  .login-box
+    text-align: left !important
+  .ml0 
+    margin-left: 0
 </style>
