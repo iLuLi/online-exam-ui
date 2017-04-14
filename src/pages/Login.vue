@@ -41,8 +41,8 @@ export default {
     }
   },
   computed: mapState({
-    success,
-    msg
+    success: state => state.auth.success,
+    msg: state => state.auth.msg
   }),
   methods: {
     login () {

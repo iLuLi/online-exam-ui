@@ -8,7 +8,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
               <img src="../assets/imgs/user.jpg" alt="" class="user-image">
-              <span class="hidden-xs">爱登</span>
+              <span class="hidden-xs">{{username}}</span>
             </a>
             <ul class="header-dropdown dropdown-menu">
               <li>
@@ -26,8 +26,12 @@
 </template>
 
 <script>
-  export default {
+  import { mapState } from 'vuex'
 
+  export default {
+    computed: mapState({
+      username: state => state.auth.username
+    })
   }
 </script>
 

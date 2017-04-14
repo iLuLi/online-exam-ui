@@ -3,42 +3,33 @@
     <Mheader/>
     <aside class="main-sidebar">
       <div class="sidebar">
-        <ul class="nav sidebar-menu">
-          <li v-for="item in menuData">
-            <a href="#">{{item.text}}</a>
-            <ul class="nav treeview-menu" v-if="hasChild(item)">
-              <li v-for="citem in item.children">
-                <a href="#">{{citem.text}}</a>
-              </li>
-            </ul>
+        <ul class="sidebar-menu">
+          <li class="treeview">
+            <router-link to="/generate">生成代码</router-link>
           </li>
         </ul>
       </div>
     </aside>
     <div class="content-wrapper">
-
+      <router-view></router-view>
     </div>
    </div>
 </template>
 
 <script>
   import Mheader from '@/components/Mheader'
+  import Hello from '@/components/Hello.vue'
+
+  function childComponentHander (path) {
+    return resolve => {
+      require.ensure([], (require) => {
+        resolve(require('@/components/' + path + '.vue'))
+      })
+    }
+  }
   export default {
     data () {
       return {
-        menuData: [
-          {
-            'text': '1111'
-          },
-          {
-            'text': '2222',
-            'children': [
-              {
-                'text': '33333'
-              }
-            ]
-          }
-        ]
       }
     },
     methods: {
@@ -48,11 +39,19 @@
     },
     components: {
       Mheader
+    },
+    created () {
+      console.log(this.$router)
+      this.$router.addRoutes([{
+        path: '/hello',
+        name: 'Hello',
+        component: childComponentHander('Hello')
+      }])
     }
   }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
   .content-wrapper
     min-height: 610px
 </style>
