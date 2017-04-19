@@ -10,12 +10,12 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '/',
+      path: '/main',
       name: 'sys',
       component: Sys,
       children: [
         {
-          path: '/generate',
+          path: 'generate',
           name: 'generate',
           component: Generate
         }

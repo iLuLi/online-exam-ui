@@ -24,12 +24,12 @@ const mutations = {
 
 const actions = {
   [LOGIN] ({commit}, {username, password}) {
-    Vue.http.post('/api/sys/login', {username, password}).then((r) => {
-      if (r.body.code === 0) {
-        router.push('/')
+    Vue.http.post('/sys/login', {username, password}).then((r) => {
+      if (r.data.code === 0) {
+        router.push('/main')
         commit(AUTHEN, {username: 'iLu'})
       } else {
-        commit(ERROR, {msg: r.body.msg})
+        commit(ERROR, {msg: r.data.msg})
       }
     })
   }

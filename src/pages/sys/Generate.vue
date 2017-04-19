@@ -21,7 +21,7 @@
                 <input type="text" v-model="tableName" class="form-control">
               </div>
               <button class="btn btn-default" @click="query">查询</button>
-              <button class="btn btn-primary">生成代码</button>
+              <button class="btn btn-primary" @click="code">生成代码</button>
             </div>
             <div class="box-body">
               <table class="table table-hover">
@@ -44,7 +44,7 @@
               </table>
             </div>
             <div class="box-footer">
-              <Pagination :curPage="curPage" :totalPage="totalPage" :showNum="5"></Pagination>
+              <Pagination :curPage="curPage" :pageCount="pageCount" :showNum="3" v-on:changePage="changePage"></Pagination>
             </div>
           </div>
         </div>
@@ -68,11 +68,10 @@
           {label: '创建时间', name: 'createTime', width: '100'}
         ],
         data: [],
-        rowNum: 2,
+        pageSize: 5,
         curPage: 1,
-        totalPage: 10,
-        tableKey: 'tableName',
-        selectedTable: []
+        pageCount: 1,
+        tableKey: 'tableName'
       }
     },
     computed: {
@@ -87,24 +86,50 @@
             d.selected = value
           })
         }
+      },
+      selectedTable () {
+        let tables = []
+        this.data.forEach(d => {
+          if (d.selected) {
+            tables.push(d[this.tableKey])
+          }
+        })
+        return tables
       }
     },
     methods: {
       selecteOne (item) {
         item.selected = !item.selected
       },
+      changePage (page) {
+        this.curPage = page
+        this.query()
+      },
       query () {
         this.loading = true
-        let url = '/api/generate/list?page=' + this.curPage + '&limit=' + this.rowNum + '&tableName=' + this.tableName
-        this.$http.get(url).then(r => {
-          this.data = r.body.page.list.map(d => {
+        this.$http.get('generate/list', {
+          params: {
+            page: this.curPage,
+            limit: this.pageSize,
+            tableName: this.tableName
+          }
+        }).then(r => {
+          let page = r.data.page
+          this.data = page.list.map(d => {
             return {
               ...d,
               selected: false
             }
           })
+          this.curPage = page.curPage
+          this.pageSize = page.pageSize
+          this.pageCount = page.pageCount
           this.loading = false
         })
+      },
+      code () {
+        console.log(this.selectedTable)
+        location.href = 'http://localhost:8080/generate/code?tables=' + this.selectedTable
       }
     },
     created () {

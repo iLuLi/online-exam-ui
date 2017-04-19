@@ -5,7 +5,7 @@
       <div class="sidebar">
         <ul class="sidebar-menu">
           <li class="treeview">
-            <router-link to="/generate">生成代码</router-link>
+            <router-link to="/main/generate">生成代码</router-link>
           </li>
         </ul>
       </div>
